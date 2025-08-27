@@ -62,5 +62,5 @@ def get_progress():
 
 
 if __name__ == '__main__':
-    init_db()
-    app.run(debug=True)
+    init_db()  # Инициализация базы данных
+    app.run(host='0.0.0.0', port=int(os.environ.get('PORT', 5000)))
