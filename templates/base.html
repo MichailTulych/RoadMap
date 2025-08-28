@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Roadmap Progress{% endblock %}</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #f0f2f5;
+            margin: 0;
+            padding: 20px;
+            color: #333;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .menu {
+            background: #1a73e8;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+        }
+
+        .menu a {
+            color: white;
+            text-decoration: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            font-weight: 500;
+            transition: background-color 0.3s ease;
+        }
+
+        .menu a:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+
+        .menu a.active {
+            background-color: rgba(255, 255, 255, 0.3);
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 10px;
+            }
+
+            .menu {
+                flex-direction: column;
+                gap: 10px;
+                text-align: center;
+            }
+
+            .menu a {
+                padding: 8px 15px;
+            }
+        }
+    </style>
+    {% block extra_css %}{% endblock %}
+</head>
+
+<body>
+    <div class="container">
+        <div class="menu">
+            <a href="/" class="{% if request.path == '/' %}active{% endif %}">
+                <i class="fas fa-home"></i> Главная
+            </a>
+            <a href="/list_roadmaps" class="{% if request.path == '/page2' %}active{% endif %}">
+                <i class="fas fa-road"></i> Roadmap
+            </a>
+            <a href="/page3" class="{% if request.path == '/page3' %}active{% endif %}">
+                <i class="fas fa-info-circle"></i> О проекте
+            </a>
+        </div>
+
+        {% block content %}
+        {% endblock %}
+    </div>
+
+    {% block extra_js %}{% endblock %}
+</body>
+
+</html>

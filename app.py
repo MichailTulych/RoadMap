@@ -26,10 +26,22 @@ def get_db():
     conn.row_factory = sqlite3.Row
     return conn
 
+# Обработка запросов к корневому url
+
 
 @app.route('/')
-def index():
+def index():  # Отображение первой страницы
     return render_template('index.html')
+
+
+@app.route('/page2')
+def page2():
+    return render_template('page2.html')
+
+
+@app.route('/list_roadmaps')
+def list_roadmaps():
+    return render_template('list_roadmaps.html')
 
 
 @app.route('/api/progress', methods=['POST'])
