@@ -1,12 +1,30 @@
+<!DOCTYPE html>
+<html lang="ru">
 {% extends "base.html" %}
 
 {% block title %}Data Science Roadmap{% endblock %}
 
 {% block extra_css %}
 <style>
+    body {
+        background-color: #f8f9fa;
+        color: #333;
+        line-height: 1.6;
+    }
+
+    .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 20px;
+    }
+
     header {
         text-align: center;
         margin-bottom: 30px;
+        padding: 20px;
+        background: white;
+        border-radius: 10px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     }
 
     header h1 {
@@ -18,6 +36,7 @@
     header p {
         font-size: 1.1em;
         color: #666;
+        margin-top: 10px;
     }
 
     .progress-container {
@@ -37,7 +56,7 @@
     .progress {
         width: 0;
         height: 100%;
-        background: #1a73e8;
+        background: linear-gradient(90deg, #1a73e8, #6c5ce7);
         transition: width 0.3s ease;
     }
 
@@ -45,6 +64,7 @@
         font-size: 1em;
         color: #333;
         margin-bottom: 20px;
+        font-weight: 500;
     }
 
     .roadmap {
@@ -53,14 +73,22 @@
 
     .section {
         border: 1px solid #ddd;
-        border-radius: 5px;
-        margin-bottom: 10px;
+        border-radius: 10px;
+        margin-bottom: 15px;
         overflow: hidden;
+        background: white;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        transition: transform 0.2s ease;
+    }
+
+    .section:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     }
 
     .section-header {
         background: #f7f7f7;
-        padding: 15px;
+        padding: 15px 20px;
         cursor: pointer;
         display: flex;
         justify-content: space-between;
@@ -68,6 +96,7 @@
         font-weight: 500;
         font-size: 1.2em;
         color: #333;
+        transition: background 0.2s ease;
     }
 
     .section-header:hover {
@@ -76,25 +105,40 @@
 
     .section-content {
         display: none;
-        padding: 15px;
+        padding: 20px;
         background: #fff;
+        border-top: 1px solid #eee;
     }
 
     .section-content.show {
         display: block;
     }
 
+    .subtask-group {
+        margin-bottom: 25px;
+    }
+
+    .subtask-group h3 {
+        font-size: 1.1em;
+        margin-bottom: 10px;
+        color: #1a73e8;
+        padding-bottom: 5px;
+        border-bottom: 1px dashed #ddd;
+    }
+
     .subtask {
         display: flex;
         align-items: center;
-        margin-bottom: 10px;
+        margin-bottom: 8px;
         font-size: 1em;
+        padding: 5px 0;
     }
 
     .subtask input[type="checkbox"] {
-        margin-right: 10px;
-        width: 20px;
-        height: 20px;
+        margin-right: 12px;
+        width: 18px;
+        height: 18px;
+        cursor: pointer;
     }
 
     .subtask.completed {
@@ -105,25 +149,36 @@
     .controls {
         display: flex;
         justify-content: center;
-        gap: 10px;
-        margin: 20px 0;
+        gap: 15px;
+        margin: 30px 0;
+        flex-wrap: wrap;
     }
 
     button {
         background: #1a73e8;
         color: #fff;
         border: none;
-        padding: 10px 20px;
-        border-radius: 5px;
+        padding: 12px 20px;
+        border-radius: 8px;
         cursor: pointer;
         font-size: 1em;
         display: flex;
         align-items: center;
-        gap: 5px;
+        gap: 8px;
+        transition: all 0.2s ease;
     }
 
     button:hover {
         background: #1557b0;
+        transform: translateY(-2px);
+    }
+
+    #reset {
+        background: #e53935;
+    }
+
+    #reset:hover {
+        background: #c62828;
     }
 
     footer {
@@ -131,52 +186,145 @@
         margin-top: 20px;
         font-size: 0.9em;
         color: #666;
+        padding: 15px;
+        background: white;
+        border-radius: 10px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
     }
 
-    @media (max-width: 600px) {
+    .projects-section {
+        margin-top: 40px;
+        padding: 20px;
+        background: white;
+        border-radius: 10px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .projects-section h2 {
+        color: #1a73e8;
+        margin-bottom: 20px;
+        text-align: center;
+    }
+
+    .project-card {
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        padding: 20px;
+        margin-bottom: 20px;
+        background: #f9f9f9;
+    }
+
+    .project-card h3 {
+        color: #1a73e8;
+        margin-bottom: 10px;
+    }
+
+    .project-card ul {
+        padding-left: 20px;
+        margin-bottom: 10px;
+    }
+
+    .project-card li {
+        margin-bottom: 5px;
+    }
+
+    @media (max-width: 768px) {
         .container {
-            padding: 10px;
+            padding: 15px;
         }
 
         header h1 {
-            font-size: 1.8em;
+            font-size: 2em;
         }
 
         button {
-            padding: 8px 15px;
+            padding: 10px 15px;
             font-size: 0.9em;
         }
 
         .controls {
             flex-direction: column;
+            align-items: center;
+        }
+
+        .section-header {
+            padding: 12px 15px;
+            font-size: 1.1em;
         }
     }
 </style>
 {% endblock %}
 
 {% block content %}
-<header>
-    <h1><i class="fas fa-road"></i> Data Science Roadmap</h1>
-    <p>Отмечайте выполненные задачи и следите за своим прогрессом в изучении Data Science</p>
-    <div class="progress-container">
-        <div class="progress-bar">
-            <div class="progress" id="progress"></div>
+<div class="container">
+    <header>
+        <h1><i class="fas fa-road"></i> Data Science Roadmap</h1>
+        <p>Отмечайте выполненные задачи и следите за своим прогрессом в изучении Data Science</p>
+        <div class="progress-container">
+            <div class="progress-bar">
+                <div class="progress" id="progress"></div>
+            </div>
+            <div class="progress-text" id="progress-text">0% завершено</div>
         </div>
-        <div class="progress-text" id="progress-text">0% завершено</div>
+    </header>
+
+    <div class="roadmap" id="roadmap"></div>
+
+    <div class="controls">
+        <button id="expand-all"><i class="fas fa-plus-circle"></i> Развернуть все</button>
+        <button id="collapse-all"><i class="fas fa-minus-circle"></i> Свернуть все</button>
+        <button id="reset"><i class="fas fa-redo"></i> Сбросить прогресс</button>
     </div>
-</header>
 
-<div class="roadmap" id="roadmap"></div>
+    <div class="projects-section">
+        <h2><i class="fas fa-lightbulb"></i> Рекомендуемые Пет-Проекты</h2>
 
-<div class="controls">
-    <button id="expand-all"><i class="fas fa-plus-circle"></i> Развернуть все</button>
-    <button id="collapse-all"><i class="fas fa-minus-circle"></i> Свернуть все</button>
-    <button id="reset"><i class="fas fa-redo"></i> Сбросить прогресс</button>
+        <div class="project-card">
+            <h3>Anti-Fraud Simulator</h3>
+            <p><strong>Цель:</strong> Веб-демо, симулирующее поток транзакций с обнаружением мошеннических.</p>
+            <p><strong>Роль Data Scientist:</strong></p>
+            <ul>
+                <li>Найти датасет мошеннических транзакций (Kaggle)</li>
+                <li>Провести EDA и генерацию фич</li>
+                <li>Обучить модель LightGBM/CatBoost</li>
+                <li>Создать FastAPI микросервис для инференса</li>
+                <li>Обернуть решение в Docker-контейнер</li>
+            </ul>
+            <p><strong>Стек:</strong> Python, Pandas, LightGBM/CatBoost, FastAPI, Docker</p>
+        </div>
+
+        <div class="project-card">
+            <h3>RAG-powered Q&A Assistant</h3>
+            <p><strong>Цель:</strong> Частный помощник с знаниями из ваших документов.</p>
+            <p><strong>Роль Data Scientist:</strong></p>
+            <ul>
+                <li>Разбить документы на чанки</li>
+                <li>Создать эмбеддинги с Sentence Transformers</li>
+                <li>Настроить векторную базу (ChromaDB/FAISS)</li>
+                <li>Реализовать логику поиска и генерации ответов</li>
+                <li>Создать FastAPI сервис</li>
+            </ul>
+            <p><strong>Стек:</strong> Python, Sentence-Transformers, ChromaDB/FAISS, OpenAI API, FastAPI</p>
+        </div>
+
+        <div class="project-card">
+            <h3>Recommendation System API</h3>
+            <p><strong>Цель:</strong> Микросервис для рекомендации похожих товаров.</p>
+            <p><strong>Роль Data Scientist:</strong></p>
+            <ul>
+                <li>Реализовать Content-Based фильтрацию (TF-IDF/BERT)</li>
+                <li>Реализовать Collaborative Filtering (SVD)</li>
+                <li>Сравнить результаты подходов</li>
+                <li>Создать FastAPI сервис для рекомендаций</li>
+            </ul>
+            <p><strong>Стек:</strong> Python, Pandas, Scikit-learn, Sentence-Transformers, FastAPI</p>
+        </div>
+    </div>
+
+    <footer>
+        <p>Ваш прогресс автоматически сохраняется в локальном хранилище браузера</p>
+    </footer>
 </div>
-
-<footer>
-    <p>Ваш прогресс автоматически сохраняется в локальном хранилище браузера</p>
-</footer>
 {% endblock %}
 
 {% block extra_js %}
@@ -215,7 +363,7 @@
                 },
                 {
                     title: "Знакомство с библиотеками для Data Science",
-                    items: ["NumPy", "Pandas", "Matplotlib"]
+                    items: ["NumPy", "Pandas", "Matplotlib", "Scikit-learn", "PySpark (Basics)"]
                 }
             ]
         },
@@ -273,7 +421,7 @@
                 },
                 {
                     title: "Алгоритмы работы со строками",
-                    items: ["Реверс строки", "Реверс слов", "Ротации", "Удаление дубликатов", "Наиболее повторяющийся символ", "Анаграммы", "Палиндром"]
+                    items: ["Реверс строки", "Реверс слов", "Ротации", "Удаление дубликатов", "Наиболее повторяющийся символ", "Анаграммы", "Палиндром", "Расстояние Левенштейна (для задач матчинга)"]
                 },
                 {
                     title: "Рекурсия",
@@ -331,7 +479,7 @@
                 },
                 {
                     title: "Статистика",
-                    items: ["Описательная статистика (среднее, медиана, мода, стандартное отклонение)", "Проверка гипотез", "Доверительные интервалы", "Регрессионный анализ"]
+                    items: ["Описательная статистика (среднее, медиана, мода, стандартное отклонение)", "Проверка гипотез", "Доверительные интервалы", "Регрессионный анализ", "A/B тестирование", "Метрики для оценки классификации: Precision, Recall, F1-Score, ROC-AUC"]
                 }
             ]
         },
@@ -361,7 +509,7 @@
             subtasks: [
                 {
                     title: "Обучение с учителем",
-                    items: ["Регрессионные алгоритмы (линейная регрессия, логистическая регрессия)", "Классификационные алгоритмы (деревья решений, k-ближайших соседей, метод опорных векторов)"]
+                    items: ["Регрессионные алгоритмы (линейная регрессия, логистическая регрессия)", "Классификационные алгоритмы (деревья решений, k-ближайших соседей, метод опорных векторов)", "Ансамбли моделей: Random Forest, Градиентный бустинг (CatBoost, LightGBM, XGBoost)"]
                 },
                 {
                     title: "Обучение без учителя",
@@ -373,7 +521,7 @@
                 },
                 {
                     title: "Обучение моделей",
-                    items: ["Разделение на обучающую и тестовую выборки", "Кросс-валидация", "Настройка гиперпараметров"]
+                    items: ["Разделение на обучающую и тестовую выборки", "Кросс-валидация", "Настройка гиперпараметров", "Борьба с дисбалансом классов (веса, SMOTE)"]
                 },
                 {
                     title: "Переобучение и недообучение",
@@ -386,15 +534,15 @@
             subtasks: [
                 {
                     title: "Нейронные сети",
-                    items: ["Основы нейронных сетей", "Функции активации", "Прямое и обратное распространение"]
+                    items: ["Основы нейронных сети", "Функции активации", "Прямое и обратное распространение", "Регуляризация (Dropout, L2)"]
                 },
                 {
                     title: "Продвинутые нейронные сети",
-                    items: ["Свёрточные нейронные сети (CNN)", "Рекуррентные нейронные сети (RNN)"]
+                    items: ["Свёрточные нейронные сети (CNN)", "Рекуррентные нейронные сети (RNN, LSTM)", "Архитектура Transformer и механизм внимания (Attention)", "BERT и другие трансформеры"]
                 },
                 {
                     title: "Фреймворки глубокого обучения",
-                    items: ["Инструменты: TensorFlow, PyTorch, Keras"]
+                    items: ["Инструменты: TensorFlow, PyTorch, Keras", "Фокус на PyTorch"]
                 }
             ]
         },
@@ -403,11 +551,15 @@
             subtasks: [
                 {
                     title: "Обработка естественного языка (NLP)",
-                    items: ["Предобработка текста (токенизация, стемминг, лемматизация)", "Анализ тональности", "Распознавание именованных сущностей (NER)", "Языковое моделирование (NLTK, SpaCy, Hugging Face)"]
+                    items: ["Предобработка текста (токенизация, стемминг, лемматизация)", "Векторизация текста: TF-IDF, Word2Vec, FastText", "Современные эмбеддинги: Sentence Transformers (SBERT)", "Fine-tuning языковых моделей", "Анализ тональности", "Распознавание именованных сущностей (NER)", "Языковое моделирование (NLTK, SpaCy, Hugging Face)", "RAG-архитектура (Retrieval-Augmented Generation)"]
                 },
                 {
                     title: "Компьютерное зрение",
                     items: ["Классификация изображений: методы и модели", "Обнаружение объектов: алгоритмы YOLO, SSD", "Сегментация изображений: семантическая и экземплярная", "Генеративные модели: GANs в компьютерном зрении"]
+                },
+                {
+                    title: "Инженерия признаков и MLOps основы",
+                    items: ["Концепция Feature Store", "Развертывание моделей (Docker, Flask/FastAPI)", "Мониторинг моделей в продакшене", "Основы работы с облачными платформами (Yandex Cloud, AWS Sagemaker или аналог)"]
                 }
             ]
         },
@@ -416,7 +568,7 @@
             subtasks: [
                 {
                     title: "Фреймворки больших данных",
-                    items: ["Hadoop, Spark"]
+                    items: ["Hadoop, Spark", "Фокус на Apache Spark (PySpark) для обработки данных"]
                 },
                 {
                     title: "Обработка данных",
@@ -466,7 +618,7 @@
 
         const progressPercent = totalTasks ? (completedTasks / totalTasks) * 100 : 0;
         progressBar.style.width = `${progressPercent}%`;
-        progressText.textContent = `${Math.round(progressPercent)}% завершено`;
+        progressText.textContent = `${Math.round(progressPercent)}% завершено (${completedTasks}/${totalTasks} задач)`;
     }
 
     function renderRoadmap() {
@@ -554,6 +706,9 @@
         }
     });
 
+    // Initial render
     renderRoadmap();
 </script>
 {% endblock %}
+
+</html>
