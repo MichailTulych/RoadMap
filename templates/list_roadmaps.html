@@ -9,10 +9,12 @@
         <p>Выбери направление, отслеживай прогресс и делись успехами с друзьями. Удачи в обучении!</p>
     </div>
 </header>
-<div style="display: flex; justify-content: space-between; align-items: center;">
+
+<!-- Первый ряд кнопок -->
+<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
     <!-- Первая кнопка (слева) -->
     <div>
-        <a href="/page2" style="display: inline-block; background: #1a73e8; color: white; 
+        <a href="/data_science" style="display: inline-block; background: #1a73e8; color: white; 
                 text-decoration: none; padding: 30px 10px; border-radius: 8px; 
                 font-size: 1.7em; transition: background-color 0.3s ease;margin-left: 30px;">
             <i class="fas fa-brain"></i> Data Science Roadmap
@@ -21,12 +23,22 @@
 
     <!-- Вторая кнопка (справа) -->
     <div>
-        <a href="/page3" style="display: inline-block; background: #1a73e8; color: white; 
+        <a href="/backend" style="display: inline-block; background: #1a73e8; color: white; 
            text-decoration: none; padding: 30px 30px; border-radius: 8px; 
            font-size: 1.7em; transition: background-color 0.3s ease;margin-right: 30px;">
             <i class="fas fa-server"></i> Backend Roadmap
         </a>
     </div>
 </div>
+
+<!-- Второй ряд с третьей кнопкой -->
+<div style="display: flex; justify-content: flex-start; align-items: center;">
+    <div>
+        <a href="/devops" style="display: inline-block; background: #1a73e8; color: white; 
+                text-decoration: none; padding: 30px 43px; border-radius: 8px; 
+                font-size: 1.7em; transition: background-color 0.3s ease;margin-left: 30px;">
+            <i class="fas fa-sync-alt"></i> DevOps Roadmap
+        </a>
+    </div>
 </div>
 {% endblock %}

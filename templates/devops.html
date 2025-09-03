@@ -1,0 +1,541 @@
+{% extends "base.html" %}
+
+{% block title %}DevOps Roadmap{% endblock %}
+
+{% block extra_css %}
+<style>
+    header {
+        text-align: center;
+        margin-bottom: 30px;
+    }
+
+    header h1 {
+        font-size: 2.5em;
+        margin: 0;
+        color: #1a73e8;
+    }
+
+    header p {
+        font-size: 1.1em;
+        color: #666;
+    }
+
+    .progress-container {
+        margin-top: 20px;
+        text-align: center;
+    }
+
+    .progress-bar {
+        width: 100%;
+        background: #e0e0e0;
+        border-radius: 5px;
+        overflow: hidden;
+        height: 20px;
+        margin-bottom: 10px;
+    }
+
+    .progress {
+        width: 0;
+        height: 100%;
+        background: #1a73e8;
+        transition: width 0.3s ease;
+    }
+
+    .progress-text {
+        font-size: 1em;
+        color: #333;
+        margin-bottom: 20px;
+    }
+
+    .roadmap {
+        margin-top: 20px;
+    }
+
+    .section {
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        margin-bottom: 10px;
+        overflow: hidden;
+    }
+
+    .section-header {
+        background: #f7f7f7;
+        padding: 15px;
+        cursor: pointer;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-weight: 500;
+        font-size: 1.2em;
+        color: #333;
+    }
+
+    .section-header:hover {
+        background: #e8f0fe;
+    }
+
+    .section-content {
+        display: none;
+        padding: 15px;
+        background: #fff;
+    }
+
+    .section-content.show {
+        display: block;
+    }
+
+    .subtask {
+        display: flex;
+        align-items: center;
+        margin-bottom: 10px;
+        font-size: 1em;
+    }
+
+    .subtask input[type="checkbox"] {
+        margin-right: 10px;
+        width: 20px;
+        height: 20px;
+    }
+
+    .subtask.completed {
+        text-decoration: line-through;
+        color: #888;
+    }
+
+    .subtask a {
+        color: #1a73e8;
+        text-decoration: none;
+    }
+
+    .subtask a:hover {
+        text-decoration: underline;
+    }
+
+    .controls {
+        display: flex;
+        justify-content: center;
+        gap: 10px;
+        margin: 20px 0;
+    }
+
+    button {
+        background: #1a73e8;
+        color: #fff;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 1em;
+        display: flex;
+        align-items: center;
+        gap: 5px;
+    }
+
+    button:hover {
+        background: #1557b0;
+    }
+
+    footer {
+        text-align: center;
+        margin-top: 20px;
+        font-size: 0.9em;
+        color: #666;
+    }
+
+    .time-estimate {
+        font-size: 0.9em;
+        color: #666;
+        margin-bottom: 10px;
+        font-style: italic;
+    }
+
+    .description {
+        margin-bottom: 15px;
+        color: #444;
+        line-height: 1.5;
+    }
+
+    @media (max-width: 600px) {
+        .container {
+            padding: 10px;
+        }
+
+        header h1 {
+            font-size: 1.8em;
+        }
+
+        button {
+            padding: 8px 15px;
+            font-size: 0.9em;
+        }
+
+        .controls {
+            flex-direction: column;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<header>
+    <h1><i class="fas fa-road"></i> DevOps Roadmap</h1>
+    <p>Отмечайте выполненные задачи и следите за своим прогрессом в изучении DevOps</p>
+    <div class="progress-container">
+        <div class="progress-bar">
+            <div class="progress" id="progress"></div>
+        </div>
+        <div class="progress-text" id="progress-text">0% завершено</div>
+    </div>
+</header>
+
+<div class="roadmap" id="roadmap"></div>
+
+<div class="controls">
+    <button id="expand-all"><i class="fas fa-plus-circle"></i> Развернуть все</button>
+    <button id="collapse-all"><i class="fas fa-minus-circle"></i> Свернуть все</button>
+    <button id="reset"><i class="fas fa-redo"></i> Сбросить прогресс</button>
+</div>
+
+<footer>
+    <p>Ваш прогресс автоматически сохраняется в локальном хранилище браузера</p>
+</footer>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    const roadmapData = [
+        {
+            title: "Основы Linux",
+            description: "Linux - это операционная система с открытым кодом, широко используемая на серверах и для разработки. Как DevOps, вы будете настраивать и поддерживать инфраструктуру для работы приложений. Поскольку большинство серверов работают на Linux, умение работать с этой системой, особенно с командной строкой must have.",
+            timeEstimate: "2-3 недели",
+            subtasks: [
+                {
+                    title: "Основные понятия",
+                    items: [
+                        "Командная строка Bash",
+                        "File System",
+                        "Permissions",
+                        "Processes",
+                        { text: "Администрирование Linux", link: "https://www.youtube.com/playlist?list=PLYl91BhaOf-kkXWweBzgOw555he6S7SUs" },
+                        { text: "Основы Linux (обзор с практическим уклоном)", link: "https://habr.com/ru/articles/655275/" }
+                    ]
+                }
+            ]
+        },
+        {
+            title: "Networking",
+            description: "Это то, как компьютеры и устройства соединяются друг с другом и общаются. Вам нужно понимать как данные передаются, как их защитить и устранить неполадки, контролировать трафик.",
+            timeEstimate: "2 недели",
+            subtasks: [
+                {
+                    title: "Основные понятия",
+                    items: [
+                        "OSI & TCP/IP модели",
+                        "IP addressing",
+                        "Masks subnets",
+                        "DNS и DHCP",
+                        "Network protocols (HTTP, HTTPS, FTP, SSH и другие)",
+                        "Firewalls",
+                        "Utils like ping, traceroute, netstat",
+                        { text: "Книга Microsoft Windows Networking Essentials", link: "https://repo.tzku.at/book/system/windows/microsoftwindowsnetworkingessentials.pdf" },
+                        { text: "Обучающий ролик на данную тему", link: "https://www.youtube.com/watch?v=H3BlibIF6hQ" },
+                        { text: "Пройди экзамен comptia network+ (необязательно)", link: "https://www.comptia.org/en-us/certifications/network/" }
+                    ]
+                }
+            ]
+        },
+        {
+            title: "Git",
+            description: "Это система контроля версий, которая позволяет отслеживать изменения в коде и координировать совместную работу над проектами.",
+            timeEstimate: "1-2 недели",
+            subtasks: [
+                {
+                    title: "Основные понятия",
+                    items: [
+                        "Основы системы контроля версий Git",
+                        "Коммиты",
+                        "Работа с GitLab / GitHub",
+                        "Git diff и git reset",
+                        "Branching - создание, слияние и удаление ветвей",
+                        "Git-клиенты"
+                    ]
+                }
+            ]
+        },
+        {
+            title: "Языки программирования",
+            description: "Языки программирования нужны DevOps-инженерам для автоматизации задач, таких как настройка серверов и развертывание приложений. Вы будете писать сценарии для автоматизации рутинных задач, работы с конфигурациями и интеграции различных инструментов. Наиболее популярными языками являются Python и Go, но достаточно одного.",
+            timeEstimate: "4-6 недели",
+            subtasks: [
+                {
+                    title: "Что учить",
+                    items: [
+                        "Синтаксис до умения написать консольный калькулятор"
+                    ]
+                }
+            ]
+        },
+        {
+            title: "Cloud Providers",
+            description: "Облачные провайдеры такие как AWS, Azure, Google Cloud предоставляют услуги вычислений, хранения данных и сетей, которые можно использовать для создания и развертывания приложений. Я рекомендую изучать AWS, он популярный и занимает половину рынка.",
+            timeEstimate: "3-4 недели",
+            subtasks: [
+                {
+                    title: "Must have умения",
+                    items: [
+                        "Настройка виртуальных серверов",
+                        "Управление данными",
+                        "Управление пользователями",
+                        "Настройка изолированных сетей"
+                    ]
+                }
+            ]
+        },
+        {
+            title: "Containerization (Docker)",
+            description: "Контейнеризация — это способ упаковки приложений и всех их зависимостей в единый контейнер, который можно запускать на любой платформе. Docker - это основной инструмент для контейнеризации.",
+            timeEstimate: "3-4 недели",
+            subtasks: [
+                {
+                    title: "Must have умения",
+                    items: [
+                        "Создание имеджей",
+                        "Управление контейнерами",
+                        "Создание докер-файлов",
+                        "Запуск мульти-контейнеров с Docker Compose"
+                    ]
+                }
+            ]
+        },
+        {
+            title: "Networking & Infrastructure Services",
+            description: "Включает настройку и управление такими сервисами, как обратные прокси, прямые прокси, кэш-серверы, брандмауэры и балансировщики нагрузки. Рекомендую использовать NGINX.",
+            timeEstimate: "3-4 недели",
+            subtasks: [
+                {
+                    title: "Основные понятия",
+                    items: [
+                        "Reverse & forward proxis",
+                        "Caching servers",
+                        "Firewalls",
+                        "Load Balancers"
+                    ]
+                }
+            ]
+        },
+        {
+            title: "Container Orchestration (Kubernetes) - опционально",
+            description: "Это система для автоматического управления контейнерами, которая помогает их запускать, масштабировать и поддерживать в стабильном состоянии.",
+            timeEstimate: "4-6 недель",
+            subtasks: [
+                {
+                    title: "Что изучать",
+                    items: [
+                        "Kubernetes"
+                    ]
+                }
+            ]
+        },
+        {
+            title: "Continuous Integration/Continuous Delivery (CI/CD)",
+            description: "Непрерывная интеграция и непрерывное развертывание (CI/CD) — это подход в разработке программного обеспечения, который помогает командам быстро и качественно выпускать новые версии приложений. Jenkins - мощный инструмент для создания конвейеров CI/CD, рекомендую изучить его.",
+            timeEstimate: "3-4 недели",
+            subtasks: [
+                {
+                    title: "Must have умение",
+                    items: [
+                        "Уметь написать скрипт, который запускает и останавливает контейнеры с Docker-образами на AWS"
+                    ]
+                }
+            ]
+        },
+        {
+            title: "Configuration Management - опционально",
+            description: "Инструменты управления конфигурацией автоматизируют развертывание, настройку и управление серверами и приложениями.",
+            timeEstimate: "3-4 недели",
+            subtasks: [
+                {
+                    title: "Что изучать (на выбор)",
+                    items: [
+                        "Ansible",
+                        "Puppet",
+                        "Chef"
+                    ]
+                }
+            ]
+        },
+        {
+            title: "Infrastructure as Code - опционально",
+            description: "Infrastructure as Code (IaC) - это подход, при котором инфраструктура (серверы, сети, базы данных) управляется с помощью кода, а не вручную. Вместо того чтобы вручную настраивать серверы или сетевые подключения, все это описывается в конфигурационных файлах. Это позволяет автоматически развертывать и изменять инфраструктуру, делая процесс более быстрым, повторяемым и менее подверженным ошибкам.",
+            timeEstimate: "3-4 недели",
+            subtasks: [
+                {
+                    title: "Основной софт",
+                    items: [
+                        "Terraform"
+                    ]
+                }
+            ]
+        },
+        {
+            title: "Monitoring & Logging - опционально",
+            description: "Monitoring & Logging - это процессы, помогающие отслеживать работу систем и приложений и анализировать их действия.",
+            timeEstimate: "3-4 недели",
+            subtasks: [
+                {
+                    title: "Что изучать (на выбор)",
+                    items: [
+                        "Prometheus",
+                        "Grafana"
+                    ]
+                }
+            ]
+        }
+    ];
+
+    const roadmap = document.getElementById('roadmap');
+    const progressBar = document.getElementById('progress');
+    const progressText = document.getElementById('progress-text');
+    const expandAllBtn = document.getElementById('expand-all');
+    const collapseAllBtn = document.getElementById('collapse-all');
+    const resetBtn = document.getElementById('reset');
+
+    let progressState = JSON.parse(localStorage.getItem('roadmapProgress')) || {};
+
+    function saveProgress() {
+        localStorage.setItem('roadmapProgress', JSON.stringify(progressState));
+        updateProgress();
+    }
+
+    function updateProgress() {
+        let totalTasks = 0;
+        let completedTasks = 0;
+
+        roadmapData.forEach((section, sectionIndex) => {
+            section.subtasks.forEach((subtask, subtaskIndex) => {
+                subtask.items.forEach((item, itemIndex) => {
+                    totalTasks++;
+                    const key = `task-${sectionIndex}-${subtaskIndex}-${itemIndex}`;
+                    if (progressState[key]) {
+                        completedTasks++;
+                    }
+                });
+            });
+        });
+
+        const progressPercent = totalTasks ? (completedTasks / totalTasks) * 100 : 0;
+        progressBar.style.width = `${progressPercent}%`;
+        progressText.textContent = `${Math.round(progressPercent)}% завершено`;
+    }
+
+    function renderRoadmap() {
+        roadmap.innerHTML = '';
+        roadmapData.forEach((section, sectionIndex) => {
+            const sectionDiv = document.createElement('div');
+            sectionDiv.classList.add('section');
+
+            const sectionHeader = document.createElement('div');
+            sectionHeader.classList.add('section-header');
+            sectionHeader.innerHTML = `<span>${section.title}</span><i class="fas fa-chevron-down"></i>`;
+            sectionHeader.addEventListener('click', () => {
+                const content = sectionDiv.querySelector('.section-content');
+                const icon = sectionHeader.querySelector('i');
+                content.classList.toggle('show');
+                icon.classList.toggle('fa-chevron-down');
+                icon.classList.toggle('fa-chevron-up');
+            });
+
+            const sectionContent = document.createElement('div');
+            sectionContent.classList.add('section-content');
+
+            // Добавляем описание и время изучения
+            if (section.description) {
+                const descriptionDiv = document.createElement('div');
+                descriptionDiv.classList.add('description');
+                descriptionDiv.textContent = section.description;
+                sectionContent.appendChild(descriptionDiv);
+            }
+
+            if (section.timeEstimate) {
+                const timeDiv = document.createElement('div');
+                timeDiv.classList.add('time-estimate');
+                timeDiv.textContent = `Предполагаемое время изучения: ${section.timeEstimate}`;
+                sectionContent.appendChild(timeDiv);
+            }
+
+            section.subtasks.forEach((subtask, subtaskIndex) => {
+                const subtaskDiv = document.createElement('div');
+                subtaskDiv.classList.add('subtask-group');
+                subtaskDiv.innerHTML = `<h3>${subtask.title}</h3>`;
+
+                subtask.items.forEach((item, itemIndex) => {
+                    const taskDiv = document.createElement('div');
+                    taskDiv.classList.add('subtask');
+                    const key = `task-${sectionIndex}-${subtaskIndex}-${itemIndex}`;
+                    const isChecked = progressState[key] || false;
+
+                    // Обработка объектов с ссылками и обычного текста
+                    let itemContent;
+                    if (typeof item === 'object' && item.link) {
+                        itemContent = `<a href="${item.link}" target="_blank" rel="noopener noreferrer">${item.text}</a>`;
+                    } else {
+                        itemContent = item;
+                    }
+
+                    taskDiv.innerHTML = `
+                        <input type="checkbox" ${isChecked ? 'checked' : ''}>
+                        <span>${itemContent}</span>
+                    `;
+
+                    const checkbox = taskDiv.querySelector('input');
+                    checkbox.addEventListener('change', () => {
+                        progressState[key] = checkbox.checked;
+                        taskDiv.classList.toggle('completed', checkbox.checked);
+                        saveProgress();
+                    });
+
+                    if (isChecked) {
+                        taskDiv.classList.add('completed');
+                    }
+
+                    subtaskDiv.appendChild(taskDiv);
+                });
+
+                sectionContent.appendChild(subtaskDiv);
+            });
+
+            sectionDiv.appendChild(sectionHeader);
+            sectionDiv.appendChild(sectionContent);
+            roadmap.appendChild(sectionDiv);
+        });
+
+        updateProgress();
+    }
+
+    expandAllBtn.addEventListener('click', () => {
+        document.querySelectorAll('.section-content').forEach(content => {
+            content.classList.add('show');
+            content.previousElementSibling.querySelector('i').classList.remove('fa-chevron-down');
+            content.previousElementSibling.querySelector('i').classList.add('fa-chevron-up');
+        });
+    });
+
+    collapseAllBtn.addEventListener('click', () => {
+        document.querySelectorAll('.section-content').forEach(content => {
+            content.classList.remove('show');
+            content.previousElementSibling.querySelector('i').classList.remove('fa-chevron-up');
+            content.previousElementSibling.querySelector('i').classList.add('fa-chevron-down');
+        });
+    });
+
+    resetBtn.addEventListener('click', () => {
+        if (confirm('Вы уверены, что хотите сбросить весь прогресс?')) {
+            progressState = {};
+            localStorage.removeItem('roadmapProgress');
+            renderRoadmap();
+        }
+    });
+
+    renderRoadmap();
+</script>
+{% endblock %}

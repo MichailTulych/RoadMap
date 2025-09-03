@@ -34,14 +34,19 @@ def index():  # Отображение первой страницы
     return render_template('index.html')
 
 
-@app.route('/page2')
-def page2():
-    return render_template('page2.html')
-
-
 @app.route('/list_roadmaps')
 def list_roadmaps():
     return render_template('list_roadmaps.html')
+
+
+@app.route('/data_science')
+def data_science():
+    return render_template('data_science.html')
+
+
+@app.route('/devops')
+def devops():
+    return render_template('devops.html')
 
 
 @app.route('/api/progress', methods=['POST'])
